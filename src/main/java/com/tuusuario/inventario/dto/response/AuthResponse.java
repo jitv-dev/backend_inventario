@@ -1,5 +1,11 @@
 package com.tuusuario.inventario.dto.response;
 
-public class AuthResponse {
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
+public class AuthResponse {
+    public String token;
+    public String rol;
 }
