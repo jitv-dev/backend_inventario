@@ -3,6 +3,8 @@ package com.tuusuario.inventario.service;
 import com.tuusuario.inventario.dto.request.LoginRequest;
 import com.tuusuario.inventario.dto.request.RegisterRequest;
 import com.tuusuario.inventario.dto.response.AuthResponse;
+import com.tuusuario.inventario.exception.DuplicadoException;
+import com.tuusuario.inventario.exception.RecursoNoEncontradoException;
 import com.tuusuario.inventario.model.Usuario;
 import com.tuusuario.inventario.repository.UsuarioRepository;
 import com.tuusuario.inventario.security.JwtUtil;
@@ -31,7 +33,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
         String token = jwtUtil.generateToken(usuario.getEmail());
         return new AuthResponse(token, usuario.getRol().name());
@@ -39,7 +41,7 @@ public class AuthService {
 
     public Usuario register(RegisterRequest request){
         if (usuarioRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email ya registrado");
+            throw new DuplicadoException("Email ya registrado");
         }
 
         Usuario usuario = new Usuario();
@@ -54,6 +56,6 @@ public class AuthService {
 
     public Usuario buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
     }
 }

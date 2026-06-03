@@ -21,6 +21,12 @@ public class GlobalExceptionHandler {
                 .body(Map.of("error", ex.getMessage()));
     }
 
+    @ExceptionHandler(DuplicadoException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicado(DuplicadoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
     @ExceptionHandler(StockInsuficienteException.class)
     public ResponseEntity<Map<String, String>> handleStockInsuficiente(StockInsuficienteException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
